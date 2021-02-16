@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+
+/data
+/data derived/survdat_names_sed.csv
