@@ -1,0 +1,88 @@
+---
+title: "Horseshoe crab abundance and biomass through time"
+subtitle: "Data from the NEFSC seasonal bottom trawl surveys"
+author: "Mike O'Brien"
+date: '2021-02-15'
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE, warning = FALSE, message = FALSE,
+  dev = 'ragg_png', dpi = 300, fig.height = 4, fig.width = 8
+)
+```
+
+Data set runs from 1963 - 2019; horseshoe crab catch prior to 1969 was either not recorded or 0. Color and transparency are scaled by the corrected abundance or biomass: color runs from purple (low) to yellow (high), and transparency runs faint (low) to strong (high). Note that the color/transparency scale changes between each plot.
+
+```{r data-import}
+library(ggplot2); library(data.table); library(sf)
+survdat <- fread('data derived/survdat_names_sed.csv')
+
+coast <- read_sf('data derived/mapping/coast_crop.shp')
+
+
+hc <- survdat[comname == 'horseshoe crab']
+
+hc <- st_as_sf(hc, coords = c('lon', 'lat'), crs = 4326)
+
+yrly_plot <- function(yr_index, type){
+  ggplot() +
+    geom_sf(data = coast, color = 'lightgray') +
+    geom_sf(data = hc[hc$year %in% unique(hc$year)[yr_index],],
+            aes_(color = as.name(type), alpha = as.name(type))) +
+    scale_color_viridis_c() +
+    scale_alpha(guide = 'none') +
+    coord_sf(xlim = c(-78, -70), ylim = c(35, 42)) +
+    labs(color = paste0(toupper(substr(type, 1, 1)),
+                        substr(type, 2, nchar(type)))) +
+    facet_grid(season ~ year) +
+    theme_bw()
+}
+
+```
+
+## Abundance
+
+```{r abundance}
+yrly_plot(1:5, 'abundance')
+
+yrly_plot(6:10, 'abundance')
+
+yrly_plot(11:15, 'abundance')
+
+yrly_plot(16:20, 'abundance')
+
+yrly_plot(21:25, 'abundance')
+
+yrly_plot(26:30, 'abundance')
+
+yrly_plot(31:35, 'abundance')
+
+yrly_plot(36:40, 'abundance')
+
+yrly_plot(41:46, 'abundance')
+```
+
+## Biomass
+
+```{r biomass}
+yrly_plot(1:5, 'biomass')
+
+yrly_plot(6:10, 'biomass')
+
+yrly_plot(11:15, 'biomass')
+
+yrly_plot(16:20, 'biomass')
+
+yrly_plot(21:25, 'biomass')
+
+yrly_plot(26:30, 'biomass')
+
+yrly_plot(31:35, 'biomass')
+
+yrly_plot(36:40, 'biomass')
+
+yrly_plot(41:46, 'biomass')
+```
