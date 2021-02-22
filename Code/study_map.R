@@ -32,7 +32,7 @@ crs = 4326) %>%
 
 library(ggspatial); library(ragg)
 
-agg_png('figures/study_map.png', height = 650, width = 850, scaling = 1.5)
+agg_png('figures/study_map.png', height = 1300, width = 1700, scaling = 1.5, res = 144)
 
 ggplot() +
   geom_sf(data = coast, fill = 'gray') +
@@ -42,19 +42,24 @@ ggplot() +
 
   geom_sf(data = lease_blocks, fill = NA, color = 'darkgray', size = 1) +
 
-  geom_sf(data = bsb_sites, shape = 15, size = 3) +
+  geom_sf(data = bsb_sites, shape = 22, size = 3, stroke = 2,
+          fill = 'white', color= 'black') +
 
-  annotation_scale(location = 'tl') +
+  annotation_scale(location = 'tl',text_cex = 1) +
   coord_sf(xlim  = c(-75.2, -74.2), ylim = c(38, 38.6)) +
 
-  scale_color_viridis_d() +
+  scale_color_viridis_d(guide = guide_legend(reverse = TRUE)) +
+  scale_fill_discrete(guide = guide_legend(reverse = TRUE)) +
   labs(fill = 'Experimental Area', color = 'Depth (m)') +
   theme_bw() +
 
   theme(legend.position = c(0.8, 0.7),
         legend.box.background = element_rect(fill = 'white', color = 'black'),
         legend.background = element_rect(fill = NA),
-        plot.margin = margin(0, 0, 0, 0))
+        plot.margin = margin(0, 0, 0, 0),
+        axis.text = element_text(size = 12),
+        axis.text.y = element_text(angle = 30),
+        legend.text = element_text(size = 12))
 
 
 dev.off()
